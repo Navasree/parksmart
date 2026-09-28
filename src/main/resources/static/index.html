@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ParkSmart – Smart Parking & Billing Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- App Wrapper -->
+  <div class="app-container" id="app">
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="4"></rect>
+              <path d="M9 17V7h4a3 3 0 0 1 0 6H9"></path>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <h2>ParkSmart</h2>
+            <span class="badge-sub">v4.1 Pro</span>
+          </div>
+        </div>
+        <button class="btn-icon sidebar-toggle-btn" id="sidebarCloseBtn" aria-label="Toggle navigation">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-group-title">MAIN MENU</div>
+        <a href="#dashboard" class="nav-item active" data-view="dashboard">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#map" class="nav-item" data-view="map">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+          <span>Live Parking Map</span>
+          <span class="nav-badge" id="liveAvailableBadge">0</span>
+        </a>
+
+        <div class="nav-group-title">MANAGEMENT</div>
+        <a href="#lots" class="nav-item" data-view="lots">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          <span>Parking Lots</span>
+        </a>
+        <a href="#slots" class="nav-item" data-view="slots">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line><line x1="3" y1="12" x2="21" y2="12"></line></svg>
+          <span>Parking Slots</span>
+        </a>
+        <a href="#bookings" class="nav-item" data-view="bookings">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <span>Bookings</span>
+        </a>
+        <a href="#checkinout" class="nav-item" data-view="checkinout">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          <span>Check-In / Out</span>
+          <span class="nav-badge pulse-badge" id="activeCheckInBadge">0</span>
+        </a>
+
+        <div class="nav-group-title">FINANCIAL & ALERTS</div>
+        <a href="#billing" class="nav-item" data-view="billing">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+          <span>Billing & Invoices</span>
+        </a>
+        <a href="#overstay" class="nav-item" data-view="overstay">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span>Overstay Alerts</span>
+          <span class="nav-badge alert-badge" id="overstayBadge">0</span>
+        </a>
+        <a href="#settings" class="nav-item" data-view="settings">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Pricing & Rates</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="btn-presentation" id="btnPresentationMode">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          <span>Presentation Mode</span>
+        </button>
+        <div class="system-status">
+          <span class="status-indicator online" id="serverStatusDot"></span>
+          <span class="status-text" id="serverStatusText">Backend Online (Port 8080)</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Shell -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="btn-icon mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <div class="page-title-box">
+            <h1 class="page-title" id="pageTitle">Dashboard Overview</h1>
+            <p class="page-subtitle" id="pageSubtitle">Real-time parking analytics and system telemetry</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="live-clock-badge">
+            <span class="clock-icon">🕒</span>
+            <span id="liveClock">--:--:--</span>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="btnGlobalRefresh" title="Refresh all backend data">
+            <svg class="spin-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            <span>Sync</span>
+          </button>
+          <button class="btn btn-primary btn-sm" id="btnQuickBooking">
+            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>New Booking</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- View Containers -->
+      <div class="content-body">
+
+        <!-- ==================== VIEW: DASHBOARD ==================== -->
+        <section class="view-section active" id="view-dashboard">
+          <!-- Metric Cards Grid -->
+          <div class="metrics-grid">
+            <div class="metric-card card-cyan">
+              <div class="metric-header">
+                <span class="metric-title">TOTAL PARKING LOTS</span>
+                <div class="metric-icon-wrap">🏢</div>
+              </div>
+              <div class="metric-value" id="statTotalLots">0</div>
+              <div class="metric-footer">
+                <span class="subtext">Registered facilities</span>
+              </div>
+            </div>
+
+            <div class="metric-card card-blue">
+              <div class="metric-header">
+                <span class="metric-title">TOTAL SLOTS</span>
+                <div class="metric-icon-wrap">🅿️</div>
+              </div>
+              <div class="metric-value" id="statTotalSlots">0</div>
+              <div class="metric-footer">
+                <span class="subtext">Managed parking bays</span>
+              </div>
+            </div>
+
+            <div class="metric-card card-emerald">
+              <div class="metric-header">
+                <span class="metric-title">AVAILABLE SLOTS</span>
+                <div class="metric-icon-wrap">🟢</div>
+              </div>
+              <div class="metric-value" id="statAvailableSlots">0</div>
+              <div class="metric-footer">
+                <span class="tag tag-success" id="statSlotAvailabilityPct">0% Free</span>
+              </div>
+            </div>
+
+            <div class="metric-card card-rose">
+              <div class="metric-header">
+                <span class="metric-title">OCCUPIED SLOTS</span>
+                <div class="metric-icon-wrap">🚗</div>
+              </div>
+              <div class="metric-value" id="statOccupiedSlots">0</div>
+              <div class="metric-footer">
+                <span class="tag tag-danger">Active Vehicles</span>
+              </div>
+            </div>
+
+            <div class="metric-card card-indigo">
+              <div class="metric-header">
+                <span class="metric-title">ACTIVE BOOKINGS</span>
+                <div class="metric-icon-wrap">📋</div>
+              </div>
+              <div class="metric-value" id="statActiveBookings">0</div>
+              <div class="metric-footer">
+                <span class="subtext">Confirmed & active reservations</span>
+              </div>
+            </div>
+
+            <div class="metric-card card-amber">
+              <div class="metric-header">
+                <span class="metric-title">PENDING PAYMENTS</span>
+                <div class="metric-icon-wrap">⏳</div>
+              </div>
+              <div class="metric-value" id="statPendingPayments">0</div>
+              <div class="metric-footer">
+                <span class="tag tag-warning">Unsettled Invoices</span>
+              </div>
+            </div>
+
+            <div class="metric-card card-green">
+              <div class="metric-header">
+                <span class="metric-title">TOTAL REVENUE</span>
+                <div class="metric-icon-wrap">💰</div>
+              </div>
+              <div class="metric-value highlight-amount" id="statTotalRevenue">₹0.00</div>
+              <div class="metric-footer">
+                <span class="subtext">Settled payments in MySQL</span>
+              </div>
+            </div>
+
+            <div class="metric-card card-crimson" id="cardOverstayAlert">
+              <div class="metric-header">
+                <span class="metric-title">OVERSTAY ALERTS</span>
+                <div class="metric-icon-wrap">🚨</div>
+              </div>
+              <div class="metric-value text-danger" id="statOverstayAlerts">0</div>
+              <div class="metric-footer">
+                <span class="tag tag-danger">Penalty Rate ₹50/hr</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dashboard Dual Panels -->
+          <div class="dashboard-panels-grid">
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <h3>Live Slot Status Overview</h3>
+                  <span class="panel-subtitle">Real-time status of bays</span>
+                </div>
+                <button class="btn btn-sm btn-outline" onclick="navigateTo('map')">Open Full Map</button>
+              </div>
+              <div class="panel-body">
+                <div class="mini-slots-grid" id="dashboardMiniSlots">
+                  <div class="empty-state-loading">Loading slots from backend...</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-card">
+              <div class="panel-header">
+                <div class="panel-title-group">
+                  <h3>Active Check-ins & Overstays</h3>
+                  <span class="panel-subtitle">Vehicles currently occupying bays</span>
+                </div>
+                <button class="btn btn-sm btn-outline" onclick="navigateTo('checkinout')">Manage Operations</button>
+              </div>
+              <div class="panel-body table-responsive">
+                <table class="data-table" id="dashboardRecentActivityTable">
+                  <thead>
+                    <tr>
+                      <th>Booking #</th>
+                      <th>Vehicle</th>
+                      <th>Customer</th>
+                      <th>Check-in</th>
+                      <th>Scheduled End</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboardRecentActivityBody">
+                    <tr><td colspan="7" class="text-center py-4">Loading active records...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================== VIEW: LIVE PARKING MAP ==================== -->
+        <section class="view-section" id="view-map">
+          <div class="view-header-bar">
+            <div class="filter-controls">
+              <label for="mapLotFilter">Filter by Lot:</label>
+              <select id="mapLotFilter" class="form-select">
+                <option value="ALL">All Parking Lots</option>
+              </select>
+            </div>
+            <div class="map-legend">
+              <div class="legend-item"><span class="legend-pill pill-available"></span> Available</div>
+              <div class="legend-item"><span class="legend-pill pill-occupied"></span> Occupied (Parked)</div>
+              <div class="legend-item"><span class="legend-pill pill-booked"></span> Booked / Reserved</div>
+              <div class="legend-item"><span class="legend-pill pill-maintenance"></span> Maintenance</div>
+            </div>
+          </div>
+
+          <div class="map-container-box">
+            <div class="parking-driveway">
+              <span class="driveway-line"></span>
+              <span class="driveway-text">▲ ENTRANCE & DRIVEWAY ▲</span>
+              <span class="driveway-line"></span>
+            </div>
+
+            <div class="live-parking-grid" id="liveParkingGrid">
+              <!-- Rendered via JS -->
+            </div>
+
+            <div class="parking-driveway">
+              <span class="driveway-line"></span>
+              <span class="driveway-text">▼ EXIT LANE ▼</span>
+              <span class="driveway-line"></span>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================== VIEW: PARKING LOTS ==================== -->
+        <section class="view-section" id="view-lots">
+          <div class="table-toolbar">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="searchLots" placeholder="Search lot name or location...">
+            </div>
+            <div class="toolbar-actions">
+              <button class="btn btn-primary" id="btnOpenCreateLot">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>Add Parking Lot</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card table-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Capacity</th>
+                    <th>Slot Breakdown</th>
+                    <th>Status</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="lotsTableBody">
+                  <tr><td colspan="7" class="text-center py-4">Loading parking lots...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================== VIEW: PARKING SLOTS ==================== -->
+        <section class="view-section" id="view-slots">
+          <div class="table-toolbar">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="searchSlots" placeholder="Search slot number...">
+            </div>
+            <div class="filter-controls">
+              <select id="filterSlotStatus" class="form-select">
+                <option value="ALL">All Statuses</option>
+                <option value="AVAILABLE">Available</option>
+                <option value="OCCUPIED">Occupied</option>
+                <option value="BOOKED">Booked</option>
+                <option value="MAINTENANCE">Maintenance</option>
+              </select>
+              <select id="filterSlotLot" class="form-select">
+                <option value="ALL">All Lots</option>
+              </select>
+            </div>
+            <div class="toolbar-actions">
+              <button class="btn btn-primary" id="btnOpenCreateSlot">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>Add Parking Slot</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card table-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Slot ID</th>
+                    <th>Slot Number</th>
+                    <th>Parking Lot</th>
+                    <th>Vehicle Type</th>
+                    <th>Status</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="slotsTableBody">
+                  <tr><td colspan="6" class="text-center py-4">Loading parking slots...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================== VIEW: BOOKINGS ==================== -->
+        <section class="view-section" id="view-bookings">
+          <div class="table-toolbar">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="searchBookings" placeholder="Search vehicle, customer, booking #...">
+            </div>
+            <div class="filter-controls">
+              <select id="filterBookingStatus" class="form-select">
+                <option value="ALL">All Statuses</option>
+                <option value="CONFIRMED">Confirmed</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+                <option value="PENDING">Pending</option>
+              </select>
+            </div>
+            <div class="toolbar-actions">
+              <button class="btn btn-primary" id="btnOpenCreateBooking">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>New Booking</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card table-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Booking ID</th>
+                    <th>Customer</th>
+                    <th>Vehicle Number</th>
+                    <th>Slot / Lot</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Status</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="bookingsTableBody">
+                  <tr><td colspan="8" class="text-center py-4">Loading bookings...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================== VIEW: CHECK-IN / CHECK-OUT ==================== -->
+        <section class="view-section" id="view-checkinout">
+          <div class="notice-banner">
+            <div class="notice-icon">ℹ️</div>
+            <div class="notice-content">
+              <strong>Check-In / Check-Out Operations</strong>
+              <p>Check In registers the vehicle at the assigned bay and marks it occupied. Check Out completes the stay, calculates duration & overstay penalties via the backend engine, marks the bay available, and automatically produces the final invoice.</p>
+            </div>
+          </div>
+
+          <div class="tabs-header">
+            <button class="tab-btn active" id="tabCheckinPending" onclick="switchCheckinTab('pending')">Ready for Check-In</button>
+            <button class="tab-btn" id="tabCheckinActive" onclick="switchCheckinTab('active')">Currently Parked (Ready for Check-Out)</button>
+            <button class="tab-btn" id="tabCheckinHistory" onclick="switchCheckinTab('history')">Completed Stays</button>
+          </div>
+
+          <div class="card table-card mt-3">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr id="checkinTableHeader">
+                    <th>Booking ID</th>
+                    <th>Customer</th>
+                    <th>Vehicle</th>
+                    <th>Slot</th>
+                    <th>Scheduled Window</th>
+                    <th>Stay Status</th>
+                    <th class="text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="checkinoutTableBody">
+                  <tr><td colspan="7" class="text-center py-4">Loading check-in records...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================== VIEW: BILLING ==================== -->
+        <section class="view-section" id="view-billing">
+          <div class="table-toolbar">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="searchBills" placeholder="Search bill ID, booking ID...">
+            </div>
+            <div class="filter-controls">
+              <select id="filterBillPaymentStatus" class="form-select">
+                <option value="ALL">All Payment Statuses</option>
+                <option value="PENDING">Pending Payment</option>
+                <option value="PAID">Paid</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card table-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Bill ID</th>
+                    <th>Booking ID</th>
+                    <th>Duration</th>
+                    <th>Parking Amt</th>
+                    <th>Overstay</th>
+                    <th>Penalty</th>
+                    <th>Total Amount</th>
+                    <th>Payment Status</th>
+                    <th>Created At</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="billsTableBody">
+                  <tr><td colspan="10" class="text-center py-4">Loading billing records from MySQL...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================== VIEW: OVERSTAY ALERTS ==================== -->
+        <section class="view-section" id="view-overstay">
+          <div class="alert-banner-danger">
+            <div class="alert-icon">⚠️</div>
+            <div>
+              <h3>Overstay Monitoring Engine</h3>
+              <p>Vehicles exceeding their scheduled end-time incur an automatic backend penalty of <strong>₹50.00/hr</strong> (ceiling-calculated). Below are currently checked-in vehicles that are past their expected departure.</p>
+            </div>
+          </div>
+
+          <div class="card table-card mt-3">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Booking ID</th>
+                    <th>Vehicle</th>
+                    <th>Customer</th>
+                    <th>Slot</th>
+                    <th>Scheduled End</th>
+                    <th>Overstay Time</th>
+                    <th>Est. Penalty</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="overstayTableBody">
+                  <tr><td colspan="8" class="text-center py-4">Checking for overstaying vehicles...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================== VIEW: SETTINGS ==================== -->
+        <section class="view-section" id="view-settings">
+          <div class="settings-grid">
+            <div class="card settings-card">
+              <div class="card-header">
+                <h3>System Pricing Architecture</h3>
+                <span class="badge badge-info">Spring Boot Enforced</span>
+              </div>
+              <div class="card-body">
+                <p class="text-muted">These pricing tiers are configured and calculated permanently within the backend billing engine (<code>ParkingBillService</code>). All calculations use high-precision <code>BigDecimal</code> with ceiling rounding.</p>
+
+                <div class="pricing-tier-list">
+                  <div class="pricing-tier-item">
+                    <div class="tier-info">
+                      <span class="tier-title">First Hour Base Rate</span>
+                      <span class="tier-desc">Minimum stay fee applied to the first 60 minutes</span>
+                    </div>
+                    <div class="tier-price">₹30.00</div>
+                  </div>
+
+                  <div class="pricing-tier-item">
+                    <div class="tier-info">
+                      <span class="tier-title">Additional Hour Rate</span>
+                      <span class="tier-desc">Applied per each subsequent hour (CEIL(duration / 60) - 1)</span>
+                    </div>
+                    <div class="tier-price">₹20.00 <small>/ hr</small></div>
+                  </div>
+
+                  <div class="pricing-tier-item penalty-tier">
+                    <div class="tier-info">
+                      <span class="tier-title text-danger">Overstay Penalty Rate</span>
+                      <span class="tier-desc">Enforced when actual checkout exceeds scheduled booking end</span>
+                    </div>
+                    <div class="tier-price text-danger">₹50.00 <small>/ hr</small></div>
+                  </div>
+                </div>
+
+                <div class="backend-notice-box">
+                  <strong>Notice on System Configuration:</strong>
+                  <p>Rates are enforced directly by the Spring Boot calculation engine to guarantee data integrity in MySQL. Frontend reflects these rules without independent deviation.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card settings-card">
+              <div class="card-header">
+                <h3>Backend Telemetry & Environment</h3>
+              </div>
+              <div class="card-body telemetry-list">
+                <div class="telemetry-item">
+                  <span class="t-label">API Gateway:</span>
+                  <span class="t-value"><code>http://localhost:8080</code></span>
+                </div>
+                <div class="telemetry-item">
+                  <span class="t-label">Framework:</span>
+                  <span class="t-value">Spring Boot 4.1.1 / Java 21</span>
+                </div>
+                <div class="telemetry-item">
+                  <span class="t-label">Database:</span>
+                  <span class="t-value">MySQL 8.0 (parksmart)</span>
+                </div>
+                <div class="telemetry-item">
+                  <span class="t-label">ORM / DDL:</span>
+                  <span class="t-value">Hibernate (update mode)</span>
+                </div>
+                <div class="telemetry-item">
+                  <span class="t-label">Architecture:</span>
+                  <span class="t-value">Controller → Service → Repository → Entity</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+
+  <!-- ==================== PRESENTATION MODE OVERLAY ==================== -->
+  <div class="presentation-overlay" id="presentationOverlay">
+    <div class="presentation-header">
+      <div class="pres-brand">
+        <span class="pres-dot"></span>
+        <h2>ParkSmart Live Operations Display</h2>
+      </div>
+      <div class="pres-controls">
+        <span class="pres-clock" id="presClock">--:--:--</span>
+        <button class="btn btn-secondary btn-sm" id="btnClosePresentation">Exit Presentation</button>
+      </div>
+    </div>
+
+    <div class="presentation-body">
+      <div class="pres-stats-row">
+        <div class="pres-stat">
+          <span class="p-num" id="pAvailable">0</span>
+          <span class="p-label">AVAILABLE BAYS</span>
+        </div>
+        <div class="pres-stat stat-occ">
+          <span class="p-num" id="pOccupied">0</span>
+          <span class="p-label">OCCUPIED BAYS</span>
+        </div>
+        <div class="pres-stat stat-active">
+          <span class="p-num" id="pActive">0</span>
+          <span class="p-label">ACTIVE BOOKINGS</span>
+        </div>
+        <div class="pres-stat stat-rev">
+          <span class="p-num" id="pRevenue">₹0</span>
+          <span class="p-label">SETTLED REVENUE</span>
+        </div>
+        <div class="pres-stat stat-alert">
+          <span class="p-num" id="pOverstay">0</span>
+          <span class="p-label">OVERSTAYS</span>
+        </div>
+      </div>
+
+      <div class="pres-map-wrapper">
+        <div class="parking-driveway">
+          <span class="driveway-text">▲ ENTRANCE & DRIVEWAY ▲</span>
+        </div>
+        <div class="live-parking-grid" id="presParkingGrid"></div>
+        <div class="parking-driveway">
+          <span class="driveway-text">▼ EXIT LANE ▼</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL: PARKING LOT (CREATE / EDIT) ==================== -->
+  <div class="modal-backdrop" id="modalLot">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modalLotTitle">Add Parking Lot</h3>
+        <button class="btn-close" onclick="closeModal('modalLot')">&times;</button>
+      </div>
+      <form id="formLot">
+        <div class="modal-body">
+          <input type="hidden" id="lotId">
+          <div class="form-group">
+            <label for="lotName">Parking Lot Name <span class="required">*</span></label>
+            <input type="text" id="lotName" class="form-control" placeholder="e.g. City Center Plaza" required>
+          </div>
+          <div class="form-group">
+            <label for="lotLocation">Location <span class="required">*</span></label>
+            <input type="text" id="lotLocation" class="form-control" placeholder="e.g. Main Street, Downtown" required>
+          </div>
+          <div class="form-group">
+            <label for="lotCapacity">Total Slots (Capacity) <span class="required">*</span></label>
+            <input type="number" id="lotCapacity" class="form-control" min="1" max="1000" placeholder="e.g. 50" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalLot')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitLot">Save Parking Lot</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL: PARKING SLOT (CREATE / EDIT) ==================== -->
+  <div class="modal-backdrop" id="modalSlot">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modalSlotTitle">Add Parking Slot</h3>
+        <button class="btn-close" onclick="closeModal('modalSlot')">&times;</button>
+      </div>
+      <form id="formSlot">
+        <div class="modal-body">
+          <input type="hidden" id="slotId">
+          <div class="form-group">
+            <label for="slotLotSelect">Parking Lot <span class="required">*</span></label>
+            <select id="slotLotSelect" class="form-select" required>
+              <option value="">Select a parking lot...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="slotNumber">Slot Number <span class="required">*</span></label>
+            <input type="text" id="slotNumber" class="form-control" placeholder="e.g. A1, B2" required>
+          </div>
+          <div class="form-group">
+            <label for="slotVehicleType">Vehicle Type <span class="required">*</span></label>
+            <select id="slotVehicleType" class="form-select" required>
+              <option value="CAR">Car</option>
+              <option value="BIKE">Bike</option>
+              <option value="TRUCK">Truck</option>
+              <option value="EV">Electric Vehicle (EV)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="slotStatus">Initial Status <span class="required">*</span></label>
+            <select id="slotStatus" class="form-select" required>
+              <option value="AVAILABLE">AVAILABLE</option>
+              <option value="OCCUPIED">OCCUPIED</option>
+              <option value="BOOKED">BOOKED</option>
+              <option value="MAINTENANCE">MAINTENANCE</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalSlot')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitSlot">Save Slot</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL: BOOKING (CREATE / EDIT) ==================== -->
+  <div class="modal-backdrop" id="modalBooking">
+    <div class="modal-dialog modal-dialog-lg">
+      <div class="modal-header">
+        <h3 id="modalBookingTitle">New Parking Reservation</h3>
+        <button class="btn-close" onclick="closeModal('modalBooking')">&times;</button>
+      </div>
+      <form id="formBooking">
+        <div class="modal-body">
+          <input type="hidden" id="bookingId">
+          <div class="form-row">
+            <div class="form-group col-half">
+              <label for="bookingCustomer">Customer Name <span class="required">*</span></label>
+              <input type="text" id="bookingCustomer" class="form-control" placeholder="e.g. Alice Smith" required>
+            </div>
+            <div class="form-group col-half">
+              <label for="bookingVehicle">Vehicle Number <span class="required">*</span></label>
+              <input type="text" id="bookingVehicle" class="form-control" placeholder="e.g. TN 38 AB 1234" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-half">
+              <label for="bookingLotSelect">Parking Lot <span class="required">*</span></label>
+              <select id="bookingLotSelect" class="form-select" required>
+                <option value="">Select a parking lot...</option>
+              </select>
+            </div>
+            <div class="form-group col-half">
+              <label for="bookingSlotSelect">Parking Slot <span class="required">*</span></label>
+              <select id="bookingSlotSelect" class="form-select" required>
+                <option value="">Select a slot...</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-half">
+              <label for="bookingStartTime">Start Date & Time <span class="required">*</span></label>
+              <input type="datetime-local" id="bookingStartTime" class="form-control" required>
+            </div>
+            <div class="form-group col-half">
+              <label for="bookingEndTime">Scheduled End Date & Time <span class="required">*</span></label>
+              <input type="datetime-local" id="bookingEndTime" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="form-group" id="bookingStatusGroup" style="display: none;">
+            <label for="bookingStatus">Booking Status</label>
+            <select id="bookingStatus" class="form-select">
+              <option value="CONFIRMED">CONFIRMED</option>
+              <option value="COMPLETED">COMPLETED</option>
+              <option value="CANCELLED">CANCELLED</option>
+              <option value="PENDING">PENDING</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalBooking')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitBooking">Confirm Reservation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL: DELETE CONFIRMATION ==================== -->
+  <div class="modal-backdrop" id="modalDelete">
+    <div class="modal-dialog modal-dialog-sm">
+      <div class="modal-header">
+        <h3 class="text-danger">DELETE RECORD?</h3>
+        <button class="btn-close" onclick="closeModal('modalDelete')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="delete-warning-icon">⚠️</div>
+        <p class="delete-warning-text"><strong>This action cannot be undone.</strong></p>
+        <p class="text-muted" id="deletePromptMessage">Are you sure you want to delete this record?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modalDelete')">Cancel</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmDelete">Delete Record</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL: PROFESSIONAL INVOICE ==================== -->
+  <div class="modal-backdrop" id="modalInvoice">
+    <div class="modal-dialog modal-dialog-invoice">
+      <div class="modal-header invoice-modal-header no-print">
+        <h3>PARKSMART INVOICE</h3>
+        <button class="btn-close" onclick="closeModal('modalInvoice')">&times;</button>
+      </div>
+
+      <div class="invoice-printable" id="invoicePrintArea">
+        <div class="invoice-header">
+          <div class="invoice-brand">
+            <h1>PARKSMART</h1>
+            <p>Smart Parking & Overstay Billing System</p>
+          </div>
+          <div class="invoice-meta">
+            <div class="invoice-number" id="invNumber">INV-#1</div>
+            <div class="invoice-date" id="invDate">Date: --</div>
+            <div class="invoice-badge" id="invStatusBadge">PENDING</div>
+          </div>
+        </div>
+
+        <div class="invoice-divider"></div>
+
+        <div class="invoice-details-grid">
+          <div class="inv-block">
+            <span class="inv-label">Customer Name</span>
+            <span class="inv-value" id="invCustomer">--</span>
+          </div>
+          <div class="inv-block">
+            <span class="inv-label">Vehicle Number</span>
+            <span class="inv-value highlight-car" id="invVehicle">--</span>
+          </div>
+          <div class="inv-block">
+            <span class="inv-label">Parking Facility</span>
+            <span class="inv-value" id="invLot">--</span>
+          </div>
+          <div class="inv-block">
+            <span class="inv-label">Assigned Bay</span>
+            <span class="inv-value" id="invSlot">--</span>
+          </div>
+        </div>
+
+        <div class="invoice-table-box">
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Check-In Time</td>
+                <td id="invCheckIn">--</td>
+              </tr>
+              <tr>
+                <td>Scheduled Checkout</td>
+                <td id="invScheduledEnd">--</td>
+              </tr>
+              <tr>
+                <td>Actual Checkout</td>
+                <td id="invCheckOut">--</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="invoice-breakdown-box">
+          <h4>Charges Breakdown</h4>
+          <div class="breakdown-row">
+            <span>Parking Duration: <strong id="invDurationMin">0 min</strong> (<span id="invParkingHours">0</span> hrs @ ₹30 1st hr + ₹20 addtl)</span>
+            <span class="breakdown-price" id="invParkingAmount">₹0.00</span>
+          </div>
+          <div class="breakdown-row overstay-row">
+            <span>Overstay Penalty: <strong id="invOverstayMin">0 min</strong> (<span id="invOverstayHours">0</span> hrs @ ₹50/hr)</span>
+            <span class="breakdown-price text-danger" id="invOverstayPenalty">₹0.00</span>
+          </div>
+          <div class="invoice-total-row">
+            <span>TOTAL AMOUNT</span>
+            <span class="total-price" id="invTotalAmount">₹0.00</span>
+          </div>
+        </div>
+
+        <div class="invoice-footer-notes">
+          <p>Thank you for choosing ParkSmart. Please keep this invoice for your records.</p>
+        </div>
+      </div>
+
+      <div class="modal-footer invoice-footer no-print">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modalInvoice')">Close</button>
+        <button type="button" class="btn btn-outline" id="btnPrintInvoice">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          <span>Print</span>
+        </button>
+        <button type="button" class="btn btn-success" id="btnPayInvoice">Mark as Paid</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL: SLOT INSPECTOR ==================== -->
+  <div class="modal-backdrop" id="modalSlotDetail">
+    <div class="modal-dialog modal-dialog-sm">
+      <div class="modal-header">
+        <h3 id="slotDetailTitle">Slot Bay Details</h3>
+        <button class="btn-close" onclick="closeModal('modalSlotDetail')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="slot-inspector-card" id="slotInspectorContent">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+      <div class="modal-footer" id="slotDetailFooter">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modalSlotDetail')">Close</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
